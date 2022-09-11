@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet: MonoBehaviour
 {
     public Vector3 thrust;
     public Quaternion heading;
+    public enum BulletType { Player = 0, Enemy =1};
+
+    [SerializeField] BulletType m_bulletTyp = BulletType.Player;
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +48,7 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Enter Trigger");
-        if (other.CompareTag("Alien"))
+        if (m_bulletTyp == BulletType.Player && other.CompareTag("Alien"))
         {
             Alien invader = other.gameObject.GetComponent<Alien>();
             // let the other object handle its own death throes
@@ -53,13 +56,11 @@ public class Bullet : MonoBehaviour
             // Destroy the Bullet which collided with the Asteroid
             Destroy(gameObject);
         }
-        //else
-        //{
-        //    // if we collided with something else, print to console
-        //    // what the other thing was
-        //    Debug.Log("Collided with " + collider.tag);
-        //}
-    }
+        if (m_bulletTyp == BulletType.Enemy && other.CompareTag("Player"))
+        {
+            //Kill Player 
+            Destroy(gameObject);
+        }
 
     // Update is called once per frame
     void Update()

@@ -11,6 +11,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] GameObject m_enemyPrefab2;
     [SerializeField] GameObject m_enemyPrefab3;
     [SerializeField] GameObject m_enemyPrefab4;
+    public GameObject m_enemyBullet;
 
 
     GameObject m_bossShip = null;
@@ -29,6 +30,8 @@ public class EnemyManager : MonoBehaviour
     Vector3 m_moveDir;
 
     [SerializeField] float m_moveSpace = 1.0f;
+
+    float AlientShootTime = 1.0f;
 
     // Start is called before the first frame update
 
@@ -52,6 +55,7 @@ public class EnemyManager : MonoBehaviour
         //float horizontalPos = Random.Range(-1, width);
         m_moveDir = new Vector3(1, 0, 0);
         InitBossSpawnTime();
+        InitALienShootTime();
         InvokeRepeating("SpawnBoss", m_bossSpawnTime, m_bossSpawnTime);
 
     }
@@ -81,6 +85,11 @@ public class EnemyManager : MonoBehaviour
     void InitBossSpawnTime()
     {
         m_bossSpawnTime = Random.Range(5, 10);
+    }
+
+    void InitALienShootTime()
+    {
+        AlientShootTime = Random.Range(0.1f, 5.0f);
     }
 
     void SpawnBoss()
@@ -135,13 +144,21 @@ public class EnemyManager : MonoBehaviour
                 newEnemy.transform.position = new Vector3(i * distanceScale, 0, j * distanceScale);
             }
         }
-        //MoveEnemy();
+        MoveEnemy();
     }
 
     public void MoveEnemy()
     {
         m_moveCor = StartCoroutine(Move());
-        m_moveCor = StartCoroutine(Move());
+    }
+
+    public void ShootEnemy()
+    {
+        int randEnemy = Random.Range(0, EnemyList.Count);
+        Transform currEnemyTrans = EnemyList[randEnemy].transform;
+        Vector3 spawnPos = currEnemyTrans.transform.position + currEnemyTrans.transform.forward * currEnemyTrans.transform.localScale.z;
+        // instantiate the Bullet
+        Instantiate(m_bullet, spawnPos, currEnemyTrans.transform.rotation) as GameObject;
     }
 
     public void UpdateTime()
@@ -162,6 +179,15 @@ public class EnemyManager : MonoBehaviour
                 EnemyParent.transform.position += new Vector3(0, 0, -1) * m_moveSpace;
                 yield return new WaitForSeconds(MoveTime);
             }
+        }
+    }
+
+    IEnumerator RandomShoot()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(AlientShootTime);
+            // Alien Shoot
         }
     }
 }
