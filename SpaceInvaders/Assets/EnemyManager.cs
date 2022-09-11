@@ -10,6 +10,13 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] GameObject m_enemyPrefab1;
     [SerializeField] GameObject m_enemyPrefab2;
     [SerializeField] GameObject m_enemyPrefab3;
+    [SerializeField] GameObject m_enemyPrefab4;
+
+
+    GameObject m_bossShip = null;
+    [SerializeField] GameObject m_bossLeftSp;
+    [SerializeField] GameObject m_bossRightSp;
+    float m_bossSpawnTime = 1.0f;
 
     [SerializeField] GameObject EnemyParent;
 
@@ -44,6 +51,9 @@ public class EnemyManager : MonoBehaviour
     {
         //float horizontalPos = Random.Range(-1, width);
         m_moveDir = new Vector3(1, 0, 0);
+        InitBossSpawnTime();
+        InvokeRepeating("SpawnBoss", m_bossSpawnTime, m_bossSpawnTime);
+
     }
 
     bool CheckMoveDirection()
@@ -67,6 +77,33 @@ public class EnemyManager : MonoBehaviour
     void Update()
     {
         
+    }
+    void InitBossSpawnTime()
+    {
+        m_bossSpawnTime = Random.Range(5, 10);
+    }
+
+    void SpawnBoss()
+    {
+        Debug.Log("Spawning Boss time:" + m_bossSpawnTime);
+        if(m_bossShip == null)
+        {
+            int spawnPos = Random.Range(0, 1);
+
+            // Spawn from left
+            if(spawnPos == 0)
+            {
+                m_bossShip = Instantiate(m_enemyPrefab4, m_bossLeftSp.transform.position, m_enemyPrefab4.transform.rotation);
+                m_bossShip.GetComponent<AlienBoss>().m_moveDir = Vector3.right;
+            }
+            // Spawn from Right
+            else if (spawnPos == 1)
+            {
+                m_bossShip = Instantiate(m_enemyPrefab4, m_bossRightSp.transform.position, m_enemyPrefab4.transform.rotation);
+                m_bossShip.GetComponent<AlienBoss>().m_moveDir = Vector3.left;
+            }
+            InitBossSpawnTime();
+        }
     }
 
     [ContextMenu("SpawnEnemys")]
@@ -98,11 +135,12 @@ public class EnemyManager : MonoBehaviour
                 newEnemy.transform.position = new Vector3(i * distanceScale, 0, j * distanceScale);
             }
         }
-        MoveEnemy();
+        //MoveEnemy();
     }
 
     public void MoveEnemy()
     {
+        m_moveCor = StartCoroutine(Move());
         m_moveCor = StartCoroutine(Move());
     }
 

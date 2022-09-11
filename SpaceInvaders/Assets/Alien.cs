@@ -31,10 +31,10 @@ public class Alien : MonoBehaviour
         and XY being the horizontal plane. as a result, since we are looking down the Y axis, we rotate 
         the particle system so that it flys in the right way.
         */
-        Instantiate(deathExplosion, gameObject.transform.position, Quaternion.AngleAxis(-90, Vector3.right));
-        GameObject obj = GameObject.Find("GlobalObject");
-        Global g = obj.GetComponent<Global>();
-        g.score += pointValue;
+        //Instantiate(deathExplosion, gameObject.transform.position, Quaternion.AngleAxis(-90, Vector3.right));
+        //GameObject obj = GameObject.Find("GlobalObject");
+        //Global g = obj.GetComponent<Global>();
+        //g.score += pointValue;
         // Destroy removes the gameObject from the scene and
         // marks it for garbage collection
         Destroy(gameObject);

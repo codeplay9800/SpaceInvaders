@@ -45,6 +45,20 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Enter Trigger");
+        if (other.CompareTag("Alien"))
+        {
+            Alien invader = other.gameObject.GetComponent<Alien>();
+            // let the other object handle its own death throes
+            invader.Die();
+            // Destroy the Bullet which collided with the Asteroid
+            Destroy(gameObject);
+        }
+        //else
+        //{
+        //    // if we collided with something else, print to console
+        //    // what the other thing was
+        //    Debug.Log("Collided with " + collider.tag);
+        //}
     }
 
     // Update is called once per frame

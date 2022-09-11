@@ -5,7 +5,9 @@ using UnityEngine;
 public class SimpleShip : MonoBehaviour
 {
     public float m_moveSpeed;
-    public GameObject bullet;
+    public GameObject m_bullet;
+
+    GameObject m_spawnedBullet = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,11 +29,11 @@ public class SimpleShip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && m_spawnedBullet == null)
         {
-            Vector3 spawnPos = this.transform.position + this.transform.forward * this.transform.localScale.z; 
+            Vector3 spawnPos = this.transform.position + this.transform.forward * this.transform.localScale.z;
             // instantiate the Bullet
-            GameObject obj = Instantiate(bullet, spawnPos, Quaternion.identity) as GameObject;
+            m_spawnedBullet = Instantiate(m_bullet, spawnPos, Quaternion.identity) as GameObject;
             // get the Bullet Script Component of the new Bullet instance
             //Bullet b = obj.GetComponent<Bullet>();
             // set the direction the Bullet will travel in

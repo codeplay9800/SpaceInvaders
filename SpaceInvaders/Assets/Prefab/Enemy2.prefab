@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2000068076}
   m_Layer: 0
   m_Name: Enemy2
-  m_TagString: Untagged
+  m_TagString: Alien
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127,4 +127,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathExplosion: {fileID: 0}
   pointValue: 0
-  deathKnell: {fileID: 0}
+  deathKnell: {fileID: 8300000, guid: ac35152455a67014e91e7aa80fcdf3c7, type: 3}
