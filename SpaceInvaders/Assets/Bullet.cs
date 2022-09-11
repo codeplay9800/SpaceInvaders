@@ -42,6 +42,11 @@ public class Bullet : MonoBehaviour
         //}
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Enter Trigger");
+    }
+
     // Update is called once per frame
     void Update()
     {
