@@ -5,13 +5,12 @@ using UnityEngine;
 public class Alien : MonoBehaviour
 {
     public GameObject deathExplosion;
-    public int pointValue;
     public AudioClip deathKnell;
-    public EnemyType m_currType;
+    public EnemyType m_currType = EnemyType.Normal;
+    [SerializeField] int pointValue = 10;
     // Start is called before the first frame update
     void Start()
     {
-        pointValue = 10;
     }
 
     // Update is called once per frame
@@ -19,14 +18,15 @@ public class Alien : MonoBehaviour
     {
 
     }
-    public void Shoot()
-    {
 
-    }
 
     public void Die()
     {
         //Debug.Log ("OH NO I AM DYING");
+
+        //Update Player Score
+        GameManager.Instance.AddToScore(pointValue);
+
         AudioSource.PlayClipAtPoint(deathKnell, gameObject.transform.position);
         EnemyManager.Instance.RemoveAlienFromList(this);
         /* all of Shuriken's particle effects by default use the convention of Z being upwards, 
@@ -41,5 +41,13 @@ public class Alien : MonoBehaviour
         // marks it for garbage collection
         Destroy(gameObject);
 
+    }
+
+    private void OnDestroy()
+    {
+        if(m_currType == EnemyType.Boss)
+        {
+            EnemyManager.Instance.BossDestoryed(this);
+        }
     }
 }

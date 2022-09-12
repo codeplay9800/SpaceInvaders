@@ -61,6 +61,8 @@ public class EnemyManager : MonoBehaviour
         m_moveDir = new Vector3(1, 0, 0);
         InitBossSpawnTime();
         InitALienShootTime();
+        GameManager.Instance.GameIsOver += GameOver;
+        GameManager.Instance.PlayerDestroyed += PlayerDestroyed ;
     }
 
     bool CheckMoveDirection()
@@ -184,6 +186,14 @@ public class EnemyManager : MonoBehaviour
                 // Move Down
                 UpdateTime();
                 EnemyParent.transform.position += new Vector3(0, 0, -1) * m_moveSpace;
+                for(int i=0; i<EnemyList.Count; i++)
+                {
+                    // Check if reached boundary
+                    if(EnemyList[i].transform.position.z <=-6)
+                    {
+                        GameManager.Instance.GameOver(false);
+                    }
+                }
                 yield return new WaitForSeconds(MoveTime);
             }
         }
@@ -227,29 +237,42 @@ public class EnemyManager : MonoBehaviour
     public void RemoveAlienFromList(Alien currAlien)
     {
         EnemyList.Remove(currAlien);
-        CheckGameOver();
-    }
 
-    void CheckGameOver()
-    {
-        if(GameManager.Instance.GameStarted ==  true && EnemyList.Count <= 0)
+        // Check game over
+        if (GameManager.Instance.GameStarted == true && EnemyList.Count <= 0)
         {
             GameManager.Instance.GameOver(true);
-            // Stop Corotuine
-            if (m_moveCor != null)
-            {
-                StopCoroutine(m_moveCor);
-            }
+        }
+    }
 
-            if(m_shootCor != null)
-            {
-                StopCoroutine(m_shootCor);
-            }
+    public void PlayerDestroyed(float a_pauseTime)
+    {
+        StartCoroutine(TakeAGamePause(a_pauseTime));
+    }
 
-            if (m_bossCor != null)
-            {
-                StopCoroutine(m_bossCor);
-            }
+    IEnumerator TakeAGamePause(float a_pauseTime)
+    {
+        GameOver();
+        yield return new WaitForSeconds(a_pauseTime);
+        InitEnemyBehaviour();
+    }
+
+    void GameOver()
+    {
+        // Stop Corotuine
+        if (m_moveCor != null)
+        {
+            StopCoroutine(m_moveCor);
+        }
+
+        if (m_shootCor != null)
+        {
+            StopCoroutine(m_shootCor);
+        }
+
+        if (m_bossCor != null)
+        {
+            StopCoroutine(m_bossCor);
         }
     }
 }
