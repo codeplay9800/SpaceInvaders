@@ -26,7 +26,7 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField] float MoveTime = 1.0f;
 
-    Coroutine m_moveCor = null;
+    Coroutine m_moveCor = null, m_shootCor = null;
     Vector3 m_moveDir;
 
     [SerializeField] float m_moveSpace = 1.0f;
@@ -58,6 +58,8 @@ public class EnemyManager : MonoBehaviour
         InitALienShootTime();
         InvokeRepeating("SpawnBoss", m_bossSpawnTime, m_bossSpawnTime);
 
+        m_shootCor = StartCoroutine(RandomShoot());
+
     }
 
     bool CheckMoveDirection()
@@ -77,11 +79,11 @@ public class EnemyManager : MonoBehaviour
         return false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    //// Update is called once per frame
+    //void Update()
+    //{
         
-    }
+    //}
     void InitBossSpawnTime()
     {
         m_bossSpawnTime = Random.Range(5, 10);
@@ -89,7 +91,7 @@ public class EnemyManager : MonoBehaviour
 
     void InitALienShootTime()
     {
-        AlientShootTime = Random.Range(0.1f, 5.0f);
+        AlientShootTime = Random.Range(0.1f, 2.0f);
     }
 
     void SpawnBoss()
@@ -105,6 +107,7 @@ public class EnemyManager : MonoBehaviour
                 m_bossShip = Instantiate(m_enemyPrefab4, m_bossLeftSp.transform.position, m_enemyPrefab4.transform.rotation);
                 m_bossShip.GetComponent<AlienBoss>().m_moveDir = Vector3.right;
             }
+
             // Spawn from Right
             else if (spawnPos == 1)
             {
@@ -141,7 +144,7 @@ public class EnemyManager : MonoBehaviour
             {
                 GameObject newEnemy = Instantiate(EnemyToInstantiate, EnemyParent.transform);
                 EnemyList.Add(newEnemy);
-                newEnemy.transform.position = new Vector3(i * distanceScale, 0, j * distanceScale);
+                newEnemy.transform.localPosition = new Vector3(i * distanceScale, 0, j * distanceScale);
             }
         }
         MoveEnemy();
@@ -156,9 +159,9 @@ public class EnemyManager : MonoBehaviour
     {
         int randEnemy = Random.Range(0, EnemyList.Count);
         Transform currEnemyTrans = EnemyList[randEnemy].transform;
-        Vector3 spawnPos = currEnemyTrans.transform.position + currEnemyTrans.transform.forward * currEnemyTrans.transform.localScale.z;
+        Vector3 spawnPos = currEnemyTrans.transform.position + currEnemyTrans.transform.forward * - currEnemyTrans.transform.localScale.z;
         // instantiate the Bullet
-        Instantiate(m_bullet, spawnPos, currEnemyTrans.transform.rotation) as GameObject;
+        Instantiate(m_enemyBullet, spawnPos, currEnemyTrans.transform.rotation);
     }
 
     public void UpdateTime()
@@ -188,6 +191,9 @@ public class EnemyManager : MonoBehaviour
         {
             yield return new WaitForSeconds(AlientShootTime);
             // Alien Shoot
+            ShootEnemy();
+            // Re Initialise Random Time to shoot
+            InitALienShootTime();
         }
     }
 }

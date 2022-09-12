@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(IBullet))]
 public class Bullet: MonoBehaviour
 {
     public Vector3 thrust;
     public Quaternion heading;
-    public enum BulletType { Player = 0, Enemy =1};
 
-    [SerializeField] BulletType m_bulletTyp = BulletType.Player;
+    [SerializeField] public IBullet bulletType;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +22,8 @@ public class Bullet: MonoBehaviour
         // apply thrust once, no need to apply it again since
         // it will not decelerate
         GetComponent<Rigidbody>().AddRelativeForce(thrust);
+
+        bulletType = GetComponent<IBullet>(); 
     }
 
     void OnCollisionEnter(Collision collision)
@@ -47,20 +49,9 @@ public class Bullet: MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Enter Trigger");
-        if (m_bulletTyp == BulletType.Player && other.CompareTag("Alien"))
-        {
-            Alien invader = other.gameObject.GetComponent<Alien>();
-            // let the other object handle its own death throes
-            invader.Die();
-            // Destroy the Bullet which collided with the Asteroid
-            Destroy(gameObject);
-        }
-        if (m_bulletTyp == BulletType.Enemy && other.CompareTag("Player"))
-        {
-            //Kill Player 
-            Destroy(gameObject);
-        }
+        //Debug.Log("Enter Trigger");
+        bulletType.Damage(other);
+    }
 
     // Update is called once per frame
     void Update()

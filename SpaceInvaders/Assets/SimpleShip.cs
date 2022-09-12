@@ -41,4 +41,11 @@ public class SimpleShip : MonoBehaviour
             //b.heading = rot;
         }
     }
+
+    public void Die()
+    {
+        // Do Somethin
+
+        Destroy(gameObject);
+    }
 }
