@@ -15,23 +15,28 @@ public class EnemyManager : MonoBehaviour
 
 
     GameObject m_bossShip = null;
+    bool canSpawnBoss = true;
+
     [SerializeField] GameObject m_bossLeftSp;
     [SerializeField] GameObject m_bossRightSp;
     float m_bossSpawnTime = 1.0f;
 
     [SerializeField] GameObject EnemyParent;
 
-    public List<GameObject> EnemyList;
+    public List<Alien> EnemyList;
     [SerializeField] float distanceScale;
 
     [SerializeField] float MoveTime = 1.0f;
 
-    Coroutine m_moveCor = null, m_shootCor = null;
+    Coroutine m_moveCor = null, m_shootCor = null, m_bossCor = null;
     Vector3 m_moveDir;
 
     [SerializeField] float m_moveSpace = 1.0f;
 
     float AlientShootTime = 1.0f;
+
+    public int m_enemyInGrid_X= 11;
+    public int m_enemyInGrid_Y = 5;
 
     // Start is called before the first frame update
 
@@ -56,10 +61,6 @@ public class EnemyManager : MonoBehaviour
         m_moveDir = new Vector3(1, 0, 0);
         InitBossSpawnTime();
         InitALienShootTime();
-        InvokeRepeating("SpawnBoss", m_bossSpawnTime, m_bossSpawnTime);
-
-        m_shootCor = StartCoroutine(RandomShoot());
-
     }
 
     bool CheckMoveDirection()
@@ -86,7 +87,7 @@ public class EnemyManager : MonoBehaviour
     //}
     void InitBossSpawnTime()
     {
-        m_bossSpawnTime = Random.Range(5, 10);
+        m_bossSpawnTime = Random.Range(10, 15);
     }
 
     void InitALienShootTime()
@@ -94,15 +95,13 @@ public class EnemyManager : MonoBehaviour
         AlientShootTime = Random.Range(0.1f, 2.0f);
     }
 
-    void SpawnBoss()
+    void InstantiateBoss()
     {
         Debug.Log("Spawning Boss time:" + m_bossSpawnTime);
-        if(m_bossShip == null)
-        {
-            int spawnPos = Random.Range(0, 1);
+        int spawnPos = Random.Range(0, 1);
 
             // Spawn from left
-            if(spawnPos == 0)
+            if (spawnPos == 0)
             {
                 m_bossShip = Instantiate(m_enemyPrefab4, m_bossLeftSp.transform.position, m_enemyPrefab4.transform.rotation);
                 m_bossShip.GetComponent<AlienBoss>().m_moveDir = Vector3.right;
@@ -114,15 +113,18 @@ public class EnemyManager : MonoBehaviour
                 m_bossShip = Instantiate(m_enemyPrefab4, m_bossRightSp.transform.position, m_enemyPrefab4.transform.rotation);
                 m_bossShip.GetComponent<AlienBoss>().m_moveDir = Vector3.left;
             }
-            InitBossSpawnTime();
-        }
+        
+        canSpawnBoss = false;
     }
 
     [ContextMenu("SpawnEnemys")]
     public void SpawnEnemys()
     {
         GameObject EnemyToInstantiate = null;
-        for (int j = 0; j < 5; j++)
+
+        // Broken Logic but its fine
+        int elements = m_enemyInGrid_X / 2;
+        for (int j = 0; j < m_enemyInGrid_Y; j++)
         {
             if(j==0)
             {
@@ -132,7 +134,7 @@ public class EnemyManager : MonoBehaviour
             {
                 EnemyToInstantiate = m_enemyPrefab2;
             }
-            if (j == 3)
+            else if (j >= 3)
             {
                 EnemyToInstantiate = m_enemyPrefab3;
             }
@@ -140,19 +142,21 @@ public class EnemyManager : MonoBehaviour
             {
                 Debug.LogError("[EnemyManager] Intantiate Enemy Error Abort!");
             }
-            for (int i = -5; i <= 5; i++)
+            for (int i = -elements; i <= elements; i++)
             {
                 GameObject newEnemy = Instantiate(EnemyToInstantiate, EnemyParent.transform);
-                EnemyList.Add(newEnemy);
+                EnemyList.Add(newEnemy.GetComponent<Alien>());
                 newEnemy.transform.localPosition = new Vector3(i * distanceScale, 0, j * distanceScale);
             }
         }
-        MoveEnemy();
+        InitEnemyBehaviour();
     }
 
-    public void MoveEnemy()
+    public void InitEnemyBehaviour()
     {
         m_moveCor = StartCoroutine(Move());
+        m_shootCor = StartCoroutine(RandomShoot());
+        m_bossCor = StartCoroutine(SpawnBoss());
     }
 
     public void ShootEnemy()
@@ -194,6 +198,58 @@ public class EnemyManager : MonoBehaviour
             ShootEnemy();
             // Re Initialise Random Time to shoot
             InitALienShootTime();
+        }
+    }
+
+    public void BossDestoryed(Alien a_boss)
+    {
+        Debug.Log("Boss Destroyed");
+        InitBossSpawnTime();
+        canSpawnBoss = true;
+    }
+    IEnumerator SpawnBoss()
+    {
+        while (true)
+        {
+            // Can spawn Boss
+            if (canSpawnBoss)
+            {
+                yield return new WaitForSeconds(m_bossSpawnTime);
+                // Alien Shoot
+                InstantiateBoss();
+            }
+            yield return null;
+            // Re Initialise Random Time to shoot\
+        }
+        yield return null;
+    }
+
+    public void RemoveAlienFromList(Alien currAlien)
+    {
+        EnemyList.Remove(currAlien);
+        CheckGameOver();
+    }
+
+    void CheckGameOver()
+    {
+        if(GameManager.Instance.GameStarted ==  true && EnemyList.Count <= 0)
+        {
+            GameManager.Instance.GameOver(true);
+            // Stop Corotuine
+            if (m_moveCor != null)
+            {
+                StopCoroutine(m_moveCor);
+            }
+
+            if(m_shootCor != null)
+            {
+                StopCoroutine(m_shootCor);
+            }
+
+            if (m_bossCor != null)
+            {
+                StopCoroutine(m_bossCor);
+            }
         }
     }
 }

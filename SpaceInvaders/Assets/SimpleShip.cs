@@ -45,7 +45,7 @@ public class SimpleShip : MonoBehaviour
     public void Die()
     {
         // Do Somethin
-
+        GameManager.Instance.ReduceLife();
         Destroy(gameObject);
     }
 }
