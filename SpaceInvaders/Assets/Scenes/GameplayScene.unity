@@ -1227,8 +1227,8 @@ MonoBehaviour:
   distanceScale: 1.2
   MoveTime: 0.8
   m_moveSpace: 1
-  m_enemyInGrid_X: 3
-  m_enemyInGrid_Y: 1
+  m_enemyInGrid_X: 11
+  m_enemyInGrid_Y: 5
 --- !u!4 &1301605373
 Transform:
   m_ObjectHideFlags: 0
