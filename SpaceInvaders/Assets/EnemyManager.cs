@@ -101,7 +101,7 @@ public class EnemyManager : MonoBehaviour
     {
         Debug.Log("Spawning Boss time:" + m_bossSpawnTime);
         int spawnPos = Random.Range(0, 1);
-
+        
             // Spawn from left
             if (spawnPos == 0)
             {
@@ -115,7 +115,7 @@ public class EnemyManager : MonoBehaviour
                 m_bossShip = Instantiate(m_enemyPrefab4, m_bossRightSp.transform.position, m_enemyPrefab4.transform.rotation);
                 m_bossShip.GetComponent<AlienBoss>().m_moveDir = Vector3.left;
             }
-        
+        SoundManager.Instance.PlayBossSound();
         canSpawnBoss = false;
     }
 
@@ -165,7 +165,7 @@ public class EnemyManager : MonoBehaviour
     {
         int randEnemy = Random.Range(0, EnemyList.Count);
         Transform currEnemyTrans = EnemyList[randEnemy].transform;
-        Vector3 spawnPos = currEnemyTrans.transform.position + currEnemyTrans.transform.forward * - currEnemyTrans.transform.localScale.z;
+        Vector3 spawnPos = currEnemyTrans.transform.position + currEnemyTrans.transform.forward * currEnemyTrans.transform.localScale.z;
         // instantiate the Bullet
         Instantiate(m_enemyBullet, spawnPos, currEnemyTrans.transform.rotation);
     }
@@ -180,13 +180,22 @@ public class EnemyManager : MonoBehaviour
         while(true)
         {
             EnemyParent.transform.position += m_moveDir * m_moveSpace;
+
+            //Play movement sound
+            SoundManager.Instance.PlayMoveSound();
+
+
             yield return new WaitForSeconds(MoveTime);
             if (CheckMoveDirection())
             {
                 // Move Down
                 UpdateTime();
                 EnemyParent.transform.position += new Vector3(0, 0, -1) * m_moveSpace;
-                for(int i=0; i<EnemyList.Count; i++)
+
+                //Play movement sound
+                SoundManager.Instance.PlayMoveSound();
+
+                for (int i=0; i<EnemyList.Count; i++)
                 {
                     // Check if reached boundary
                     if(EnemyList[i].transform.position.z <=-6)
@@ -216,6 +225,7 @@ public class EnemyManager : MonoBehaviour
         Debug.Log("Boss Destroyed");
         InitBossSpawnTime();
         canSpawnBoss = true;
+        SoundManager.Instance.StopBossSound();
     }
     IEnumerator SpawnBoss()
     {

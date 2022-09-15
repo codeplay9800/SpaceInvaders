@@ -34,6 +34,8 @@ public class SimpleShip : MonoBehaviour
             Vector3 spawnPos = this.transform.position + this.transform.forward * this.transform.localScale.z;
             // instantiate the Bullet
             m_spawnedBullet = Instantiate(m_bullet, spawnPos, Quaternion.identity) as GameObject;
+
+            SoundManager.Instance.PlayerShootSound();
             // get the Bullet Script Component of the new Bullet instance
             //Bullet b = obj.GetComponent<Bullet>();
             // set the direction the Bullet will travel in
@@ -46,6 +48,7 @@ public class SimpleShip : MonoBehaviour
     {
         // Do Somethin
         GameManager.Instance.ReduceLife();
+        SoundManager.Instance.PlayerDieSound();
         Destroy(gameObject);
     }
 }
