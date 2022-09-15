@@ -149,6 +149,7 @@ public class EnemyManager : MonoBehaviour
                 GameObject newEnemy = Instantiate(EnemyToInstantiate, EnemyParent.transform);
                 EnemyList.Add(newEnemy.GetComponent<Alien>());
                 newEnemy.transform.localPosition = new Vector3(i * distanceScale, 0, j * distanceScale);
+                newEnemy.GetComponent<Alien>().initEnemy(j); 
             }
         }
         InitEnemyBehaviour();
@@ -180,7 +181,12 @@ public class EnemyManager : MonoBehaviour
         while(true)
         {
             EnemyParent.transform.position += m_moveDir * m_moveSpace;
+            for (int i = 0; i < EnemyList.Count; i++)
+            {
+                // Check if reached boundary
 
+                EnemyList[i].RandomOrient();
+            }
             //Play movement sound
             SoundManager.Instance.PlayMoveSound();
 

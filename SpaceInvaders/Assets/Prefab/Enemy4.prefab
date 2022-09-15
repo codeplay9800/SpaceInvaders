@@ -77,9 +77,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathExplosion: {fileID: 0}
-  deathKnell: {fileID: 8300000, guid: ac35152455a67014e91e7aa80fcdf3c7, type: 3}
   m_currType: 1
   pointValue: 100
+  spriteImage: {fileID: 5168926182957224075}
 --- !u!114 &2388441550233278490
 MonoBehaviour:
   m_ObjectHideFlags: 0
