@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,11 +11,13 @@ public class GameManager : MonoBehaviour
 
     bool m_gameStarted = false;
 
+    GameState currGameState = GameState.None;
+
     int m_playerScore = 0;
 
     GameObject m_player= null;
     [SerializeField] GameObject m_playerPrefab;
-    [SerializeField] GameObject m_playerplayerSpawnPoint;
+    GameObject m_playerplayerSpawnPoint;
 
     [SerializeField] float m_playerDestroyedPauseTime = 2.0f;
 
@@ -25,6 +28,7 @@ public class GameManager : MonoBehaviour
     public event System.Action<float> PlayerDestroyed;
 
     public bool GameStarted {  get { return m_gameStarted; } }
+    public GameState CurrGameState {  get { return currGameState; } }
     // Start is called before the first frame update
 
     private void Awake()
@@ -40,11 +44,36 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
+
+        DontDestroyOnLoad(this);
     }
 
     void Start()
     {
-        StartGame();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Scene Loaded Start Scene
+        if(scene.buildIndex == 1)
+        {
+            StartGame();
+        }
+        //// End Game
+        //if (scene.buildIndex == 2)
+        //{
+        //    // Show Game Data
+
+        //}
+    }
+
+    void InitGameData()
+    {
+        m_playerScore = 0;
+        playerLives = 3;
+        currGameState = GameState.None;
+        m_playerplayerSpawnPoint = GameObject.FindGameObjectWithTag("PlayerSpawn");
     }
 
     public void ReduceLife()
@@ -67,7 +96,17 @@ public class GameManager : MonoBehaviour
         // Go to the gameover screen
         // Do something will Game Won
         GameIsOver?.Invoke();
+        if(gameWon)
+        {
+            currGameState = GameState.Won;
+        }
+        else
+        {
+            currGameState = GameState.Lost;
+        }
+        m_gameStarted = false;
         Debug.Log("Game Ended with State: " + gameWon);
+        SceneManager.LoadScene(2);
     }
 
     // Update is called once per frame
@@ -90,7 +129,8 @@ public class GameManager : MonoBehaviour
 
     void StartGame()
     {
-        InGameUIManager.Instance.InitUI(playerLives, 0);
+        InitGameData();
+        InGameUIManager.Instance.InitUI(playerLives, m_playerScore);
         EnemyManager.Instance.SpawnEnemys();
         InitPlayer();
         // Initialise Everything and Start the game

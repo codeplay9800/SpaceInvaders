@@ -49,6 +49,7 @@ public class SimpleShip : MonoBehaviour
         // Do Somethin
         GameManager.Instance.ReduceLife();
         SoundManager.Instance.PlayerDieSound();
+        InGameContainer.Instance.StartShakeCamera();
         Destroy(gameObject);
     }
 }

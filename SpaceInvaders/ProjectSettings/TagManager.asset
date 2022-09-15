@@ -8,6 +8,7 @@ TagManager:
   - Asteroid
   - Alien
   - Shield
+  - PlayerSpawn
   layers:
   - Default
   - TransparentFX

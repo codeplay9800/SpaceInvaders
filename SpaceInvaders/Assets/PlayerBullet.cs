@@ -9,6 +9,8 @@ public class PlayerBullet : MonoBehaviour, IBullet
         if (other.CompareTag("Alien"))
         {
             Alien enemyShip = other.gameObject.GetComponent<Alien>();
+
+            GameManager.Instance.AddToScore(enemyShip.PointValue);
             // let the other object handle its own death throes
             enemyShip.Die();
             // Destroy the Bullet which collided with the Asteroid

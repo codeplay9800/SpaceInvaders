@@ -4,6 +4,7 @@ using UnityEngine;
 
 
 public enum EnemyType { Normal  =0, Boss =1}
+public enum GameState { None = 0, Won = 1 , Lost =2}
 public interface IBullet
 {
     void Damage(Collider other);
