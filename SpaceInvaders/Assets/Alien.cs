@@ -10,6 +10,10 @@ public class Alien : MonoBehaviour
     [SerializeField] int pointValue = 10;
     [SerializeField] GameObject spriteImage;
 
+    Rigidbody alienRB;
+    Collider alienCollider;
+    [SerializeField] SpriteRenderer alienSR;
+
     public int PointValue { get { return pointValue; } }
 
     int currStartOrient = 0;
@@ -18,6 +22,8 @@ public class Alien : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        alienRB = GetComponent<Rigidbody>();
+        alienCollider = GetComponent<Collider>();
     }
 
     // Update is called once per frame
@@ -26,6 +32,25 @@ public class Alien : MonoBehaviour
 
     }
 
+    void ApplyRandomForce()
+    {
+        float randomAngle = Random.Range(-90, 90);
+        float randomForce = Random.Range(0.1f , 3.0f);
+        Quaternion rotation = Quaternion.Euler(0, randomAngle, 0);
+        Matrix4x4 rotateM = Matrix4x4.Rotate(rotation);
+        Vector3 randomDirection = rotateM * -this.transform.forward;
+        randomDirection = randomDirection.normalized;
+        alienRB.AddForce(randomDirection * EnemyManager.Instance.hitForce);
+    }
+
+    void DieBehaviour()
+    {
+        alienRB.isKinematic = false;
+        alienCollider.isTrigger = false;
+        alienRB.useGravity = true;
+        alienSR.color = new Vector4(alienSR.color.r, alienSR.color.g, alienSR.color.b, 0.4f);
+        ApplyRandomForce();
+    }
 
     public void Die()
     {
@@ -49,8 +74,9 @@ public class Alien : MonoBehaviour
         //g.score += pointValue;
         // Destroy removes the gameObject from the scene and
         // marks it for garbage collection
-        Destroy(gameObject);
 
+        //Destroy(gameObject);
+        DieBehaviour();
     }
 
     private void OnDestroy()

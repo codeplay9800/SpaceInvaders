@@ -33,6 +33,8 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField] float m_moveSpace = 1.0f;
 
+    public float hitForce = 100.0f;
+
     float AlientShootTime = 1.0f;
 
     public int m_enemyInGrid_X= 11;
@@ -253,7 +255,7 @@ public class EnemyManager : MonoBehaviour
     public void RemoveAlienFromList(Alien currAlien)
     {
         EnemyList.Remove(currAlien);
-
+        currAlien.transform.parent = null;
         // Check game over
         if (GameManager.Instance.GameStarted == true && EnemyList.Count <= 0)
         {
