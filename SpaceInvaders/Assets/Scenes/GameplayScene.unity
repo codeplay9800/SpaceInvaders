@@ -1419,7 +1419,7 @@ MonoBehaviour:
   EnemyParent: {fileID: 1269365452}
   EnemyList: []
   distanceScale: 1.2
-  MoveTime: 0.8
+  MoveTime: 1.2
   m_moveSpace: 1
   m_enemyInGrid_X: 11
   m_enemyInGrid_Y: 5
