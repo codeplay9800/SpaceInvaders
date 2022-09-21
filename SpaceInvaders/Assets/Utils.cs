@@ -8,4 +8,10 @@ public enum GameState { None = 0, Won = 1 , Lost =2}
 public interface IBullet
 {
     void Damage(Collider other);
+    void Damage(Collision other);
+}
+
+public interface IPlayer
+{
+    void Die();
 }

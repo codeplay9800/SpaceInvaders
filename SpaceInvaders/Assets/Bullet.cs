@@ -8,13 +8,16 @@ public class Bullet: MonoBehaviour
     public Vector3 thrust;
     public Quaternion heading;
 
+    bool canDamage = true;
+
+
     [SerializeField] public IBullet bulletType;
 
     // Start is called before the first frame update
     void Start()
     {
         // travel straight in the X-axis
-        thrust.z = 400.0f;
+        thrust.z = 800f;
         // do not passively decelerate
         GetComponent<Rigidbody>().drag = 0;
         // set the direction it will travel in
@@ -49,8 +52,20 @@ public class Bullet: MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("Enter Trigger");
-        bulletType.Damage(other);
+        if (canDamage)
+        {//Debug.Log("Enter Trigger");
+            canDamage = false;
+            bulletType.Damage(other);
+        }
+    }
+
+    private void OnColliderEnter(Collision other)
+    {
+        if (canDamage)
+        {//Debug.Log("Enter Trigger");
+            canDamage = false;
+            bulletType.Damage(other);
+        }
     }
 
     // Update is called once per frame

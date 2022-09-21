@@ -8,19 +8,38 @@ public class EnemyBullet : MonoBehaviour, IBullet
     {
         if (other.CompareTag("Player"))
         {
-            SimpleShip playerShip = other.gameObject.GetComponent<SimpleShip>();
+            IPlayer playerShip = other.gameObject.GetComponent<IPlayer>();
             // let the other object handle its own death throes
             playerShip.Die();
-            // Destroy the Bullet which collided with the Asteroid
-            Destroy(gameObject);
         }
         if (other.CompareTag("Shield"))
         {
             Shield shield = other.gameObject.GetComponent<Shield>();
             // let the other object handle its own death throes
             shield.Damage();
-            // Destroy the Bullet which collided with the Asteroid
-            Destroy(gameObject);
         }
+
+        // Destroy the Bullet which collided with the Asteroid
+        //Destroy(gameObject);
     }
+
+    public void Damage(Collision other)
+    {
+        if (other.collider.CompareTag("Player"))
+        {
+            IPlayer playerShip = other.gameObject.GetComponent<IPlayer>();
+            // let the other object handle its own death throes
+            playerShip.Die();
+        }
+        if (other.collider.CompareTag("Shield"))
+        {
+            Shield shield = other.gameObject.GetComponent<Shield>();
+            // let the other object handle its own death throes
+            shield.Damage();
+        }
+
+        // Destroy the Bullet which collided with the Asteroid
+        //Destroy(gameObject);
+    }
+
 }

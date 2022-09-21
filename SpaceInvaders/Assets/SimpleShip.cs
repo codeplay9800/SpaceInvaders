@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleShip : MonoBehaviour
+public class SimpleShip : MonoBehaviour, IPlayer
 {
     public float m_moveSpeed;
     public GameObject m_bullet;

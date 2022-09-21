@@ -41,6 +41,7 @@ public class Alien : MonoBehaviour
         Vector3 randomDirection = rotateM * -this.transform.forward;
         randomDirection = randomDirection.normalized;
         alienRB.AddForce(randomDirection * EnemyManager.Instance.hitForce);
+        alienRB.AddTorque(this.transform.right * EnemyManager.Instance.hitForce/ 10.0f);
     }
 
     void DieBehaviour()

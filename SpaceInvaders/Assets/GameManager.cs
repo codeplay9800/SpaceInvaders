@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
 
     public bool GameStarted {  get { return m_gameStarted; } }
     public GameState CurrGameState {  get { return currGameState; } }
+
+    int PowerUpResource = 0;
     // Start is called before the first frame update
 
     private void Awake()
@@ -113,6 +115,12 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void AddToResouce(int val)
+    {
+        PowerUpResource += val;
+        Debug.Log("PowerUpResource: " + PowerUpResource);
     }
 
     void InitPlayer()

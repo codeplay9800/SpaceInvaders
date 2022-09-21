@@ -7,6 +7,10 @@ public class PlayBoundary : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(other.gameObject);
+        // Destroy Any kind of bullet
+        if(other.CompareTag("Alien") || other.gameObject.GetComponent<IBullet>() != null)
+        {
+            Destroy(other.gameObject);
+        }
     }
 }
