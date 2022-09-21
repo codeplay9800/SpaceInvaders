@@ -6,9 +6,17 @@ public class InGameContainer : MonoBehaviour
 {
     public static InGameContainer Instance { get; private set; }
 
+    public GameObject ammoPrefab;
+
+    public List<GameObject> ammoSpawns;
+
+    List<Ammo> ammoSpawned;
+
     public List<Camera> m_cams;
     //public Camera threeD_Cam;
     public float m_shakeDuration;
+
+    Coroutine c_ammoSpawn;
 
     Camera currCam;
     int currCamNmber = 0;
@@ -38,6 +46,17 @@ public class InGameContainer : MonoBehaviour
     void Start()
     {
         InitCam();
+        InitAmmo();
+    }
+
+    void InitAmmo()
+    {
+        ammoSpawned = new List<Ammo>();
+        for(int i=0; i< ammoSpawns.Count; i++)
+        {
+            ammoSpawned.Add(null);
+        }
+        c_ammoSpawn = StartCoroutine(AmmoSpawner());
     }
 
     void InitCam()
@@ -91,5 +110,22 @@ public class InGameContainer : MonoBehaviour
 
         currCam.transform.localPosition = originalPos;
         yield return null;
+    }
+
+    IEnumerator AmmoSpawner()
+    {
+        while(true)
+        {
+            for(int i=0; i< ammoSpawns.Count; i++)
+            {
+                if(ammoSpawned[i] == null)
+                {
+                    GameObject ammo = Instantiate(ammoPrefab, ammoSpawns[i].transform.position, Quaternion.identity);
+                    ammoSpawned[i] = ammo.GetComponent<Ammo>();
+                    yield return new WaitForSeconds(5);
+                }
+            }
+            yield return null;
+        }
     }
 }

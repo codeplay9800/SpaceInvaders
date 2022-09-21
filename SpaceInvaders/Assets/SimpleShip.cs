@@ -52,4 +52,9 @@ public class SimpleShip : MonoBehaviour, IPlayer
         InGameContainer.Instance.StartShakeCamera();
         Destroy(gameObject);
     }
+
+    public void AddAmmo(int val)
+    {
+
+    }
 }

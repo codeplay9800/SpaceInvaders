@@ -14,4 +14,5 @@ public interface IBullet
 public interface IPlayer
 {
     void Die();
+    void AddAmmo(int val);
 }

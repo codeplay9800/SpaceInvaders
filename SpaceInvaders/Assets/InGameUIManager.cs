@@ -10,6 +10,7 @@ public class InGameUIManager : MonoBehaviour
     public GameObject m_livesPrefab;
 
     public Text ScoreText;
+    public Text powerUpText;
     public GameObject m_livesHorizonTalLayout;
     List<GameObject> m_lifeUIList = new List<GameObject>();
 
@@ -34,6 +35,11 @@ public class InGameUIManager : MonoBehaviour
     public void UpdateScore(int a_score)
     {
         ScoreText.text = "Score: " + a_score.ToString();
+    }
+
+    public void UpdatePowerUp(int a_val)
+    {
+        ScoreText.text = "Power Up: " + a_val.ToString();
     }
 
     public void ReduceLife()

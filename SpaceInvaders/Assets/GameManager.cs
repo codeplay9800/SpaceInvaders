@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] int playerLives = 3;
 
+    [SerializeField] int powerUpThreshold = 2;
+
     bool m_gameStarted = false;
 
     GameState currGameState = GameState.None;
@@ -120,7 +122,16 @@ public class GameManager : MonoBehaviour
     public void AddToResouce(int val)
     {
         PowerUpResource += val;
-        Debug.Log("PowerUpResource: " + PowerUpResource);
+        InGameUIManager.Instance.UpdatePowerUp(PowerUpResource);
+    }
+
+    public bool CanUsePowerUp()
+    {
+        if(PowerUpResource >= powerUpThreshold)
+        {
+            return true;
+        }
+        return false;
     }
 
     void InitPlayer()
