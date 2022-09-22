@@ -1,0 +1,15 @@
+New Features -
+
+1) Added Physics To Everything.
+2) Dead Alien and wasted Alien Ammo are now used as Resource to Power Up.
+3) Dead Aliens and wasted ammo should be pushed into the grinder on either side of the play platform to add to the power up resource counter.
+Power Up Includes -
+	A shield which stops enemy bullets
+	Increased fire rate 
+	Multiple Bullet spawn using same resource as a single bullet.
+4) Ammo is now limited and spawned as a resource on the play area.
+5) Added Power Up Sounds.
+6) Added Android Controls -
+	Joystick for Movement
+	Button to Shoot
+	Button to Power Up
