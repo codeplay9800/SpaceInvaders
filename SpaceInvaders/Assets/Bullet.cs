@@ -11,6 +11,7 @@ public class Bullet: MonoBehaviour
     [SerializeField] SpriteRenderer m_sr;
 
     bool canDamage = true;
+    public GameObject prefab_particleSystem;
 
 
     [SerializeField] public IBullet bulletType;
@@ -54,6 +55,7 @@ public class Bullet: MonoBehaviour
         {
             canDamage = !bulletType.Damage(collision);
             UpdateState(canDamage);
+            Instantiate(prefab_particleSystem, this.transform.position, Quaternion.identity);
         }
             //canDamage = false;
         
@@ -66,6 +68,7 @@ public class Bullet: MonoBehaviour
             //Debug.Log("Enter Trigger");
             canDamage = !bulletType.Damage(other);
             UpdateState(canDamage);
+            Instantiate(prefab_particleSystem, this.transform.position, Quaternion.identity);
         }
     }
 

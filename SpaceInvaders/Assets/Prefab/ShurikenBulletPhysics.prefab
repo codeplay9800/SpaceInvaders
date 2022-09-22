@@ -72,6 +72,8 @@ MonoBehaviour:
   thrust: {x: 0, y: 0, z: 0}
   heading: {x: 0, y: 0, z: 0, w: 0}
   m_sr: {fileID: 1236591194040812966}
+  prefab_particleSystem: {fileID: 6864025008501621128, guid: 21bbff72f4b5f3940af0d837e5d804b0,
+    type: 3}
 --- !u!54 &912154372777063245
 Rigidbody:
   m_ObjectHideFlags: 0
