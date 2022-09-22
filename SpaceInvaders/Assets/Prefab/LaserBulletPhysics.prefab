@@ -152,6 +152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thrust: {x: 0, y: 0, z: 0}
   heading: {x: 0, y: 0, z: 0, w: 0}
+  m_sr: {fileID: 8520900117744374652}
 --- !u!54 &7764644672913483159
 Rigidbody:
   m_ObjectHideFlags: 0

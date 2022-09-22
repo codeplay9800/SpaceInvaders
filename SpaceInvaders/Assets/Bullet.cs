@@ -8,6 +8,8 @@ public class Bullet: MonoBehaviour
     public Vector3 thrust;
     public Quaternion heading;
 
+    [SerializeField] SpriteRenderer m_sr;
+
     bool canDamage = true;
 
 
@@ -48,23 +50,31 @@ public class Bullet: MonoBehaviour
         //    // what the other thing was
         //    Debug.Log("Collided with " + collider.tag);
         //}
+        if (canDamage)
+        {
+            canDamage = !bulletType.Damage(collision);
+            UpdateState(canDamage);
+        }
+            //canDamage = false;
+        
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (canDamage)
-        {//Debug.Log("Enter Trigger");
-            canDamage = false;
-            bulletType.Damage(other);
+        {
+            //Debug.Log("Enter Trigger");
+            canDamage = !bulletType.Damage(other);
+            UpdateState(canDamage);
         }
     }
 
-    private void OnColliderEnter(Collision other)
+    void UpdateState(bool canDamage)
     {
-        if (canDamage)
-        {//Debug.Log("Enter Trigger");
-            canDamage = false;
-            bulletType.Damage(other);
+        if(!canDamage)
+        {
+            // Turn Off
+            m_sr.color = new Vector4(m_sr.color.r, m_sr.color.g, m_sr.color.b, 0.5f);
         }
     }
 

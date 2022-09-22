@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
         playerLives = 3;
         currGameState = GameState.None;
         m_playerplayerSpawnPoint = GameObject.FindGameObjectWithTag("PlayerSpawn");
+        InGameUIManager.Instance.UpdatePowerUp(0);
     }
 
     public void ReduceLife()

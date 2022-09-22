@@ -11,6 +11,7 @@ public class InGameUIManager : MonoBehaviour
 
     public Text ScoreText;
     public Text powerUpText;
+    public Text AmmoText;
     public GameObject m_livesHorizonTalLayout;
     List<GameObject> m_lifeUIList = new List<GameObject>();
 
@@ -39,7 +40,7 @@ public class InGameUIManager : MonoBehaviour
 
     public void UpdatePowerUp(int a_val)
     {
-        ScoreText.text = "Power Up: " + a_val.ToString();
+        powerUpText.text = "Power Up: " + a_val.ToString();
     }
 
     public void ReduceLife()
@@ -50,6 +51,11 @@ public class InGameUIManager : MonoBehaviour
             m_lifeUIList.Remove(uiToRemove);
             Destroy(uiToRemove);
         }
+    }
+
+    public void UpdateAmmo(int val)
+    {
+        AmmoText.text = "Ammo: " + val.ToString();
     }
 
     void InitSingleton()

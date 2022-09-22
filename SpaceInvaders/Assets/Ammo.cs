@@ -11,7 +11,7 @@ public class Ammo : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            other.GetComponent<IPlayer>().AddAmmo(5);
+            other.GetComponent<IPlayer>().UpdateAmmo(5);
             Destroy(gameObject);
         }
     }

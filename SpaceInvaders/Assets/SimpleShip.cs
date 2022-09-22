@@ -53,7 +53,7 @@ public class SimpleShip : MonoBehaviour, IPlayer
         Destroy(gameObject);
     }
 
-    public void AddAmmo(int val)
+    public void UpdateAmmo(int val)
     {
 
     }

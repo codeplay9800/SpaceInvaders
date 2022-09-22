@@ -10,6 +10,8 @@ TagManager:
   - Shield
   - PlayerSpawn
   - Boundary
+  - Ground
+  - PlayerShield
   layers:
   - Default
   - TransparentFX

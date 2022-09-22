@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InGameContainer : MonoBehaviour
 {
     public static InGameContainer Instance { get; private set; }
 
     public GameObject ammoPrefab;
+
+    public Joystick InGameJoyStick;
+    public Button FireButton;
+    public Button PowerUpButton;
 
     public List<GameObject> ammoSpawns;
 

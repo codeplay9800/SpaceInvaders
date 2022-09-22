@@ -10,12 +10,14 @@ public class SoundManager : MonoBehaviour
     public AudioClip BossMove;
     public AudioClip playerDie;
     public AudioClip AlienDie;
+    public AudioClip PowerUp;
 
 
     public AudioSource movementSoundSrc;
     public AudioSource playerAudioSrc;
     public AudioSource BossAudioSrc;
     public AudioSource MiscAudioSrc;
+    public AudioSource PowerUpAudioSrc;
     int currSound = 0;
 
     public static SoundManager Instance { get; private set; }
@@ -79,6 +81,19 @@ public class SoundManager : MonoBehaviour
     public void StopBossSound()
     {
         BossAudioSrc.Stop();
+    }
+
+    public void UpdatePowerUpSound(bool state)
+    {
+        if(state)
+        {
+            PowerUpAudioSrc.clip = PowerUp;
+            PowerUpAudioSrc.Play();
+        }
+        else
+        {
+            PowerUpAudioSrc.Stop();
+        }
     }
 
 }
